@@ -8,13 +8,14 @@ const db = mongoose.connection;
 
 db.on('error', (error) => (console.error(error)))
 db.once('open', () => console.log('Connected to Database'))
-const fashionRouter = require('./routes/fashion.js');
-const userRouter = require('./routes/user.js');
+//const fashionRouter = require('./routes/fashion.js');
+const test = require('./routes/user.js');
+
 
 app.use(express.json());
 app.use(cors('*'))
 
-app.use('/products', fashionRouter);
-app.use('/user', userRouter);
+// app.use('/products', fashionRouter);
+app.use('/', test);
 
 app.listen(3000, () => console.log('Server Started at port 3000'));
