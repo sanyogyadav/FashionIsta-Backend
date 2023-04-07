@@ -11,6 +11,6 @@ router.post('/:id', FavController.addProductToList)
 // empty wish list
 router.delete('/:id', FavController.emptyProductsList)
 // delete product from wish list
-router.delete('/dp/:id', FavController.deleteProduct)
+router.delete('/delete_product/:id', FavController.deleteProduct)
 
 module.exports = router;
