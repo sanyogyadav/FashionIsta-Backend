@@ -28,7 +28,7 @@ exports.addProductToCart= async (req, res) => {
   
   try{
     // Find if there is cart for the user
-    //console.log("checking",product.title);
+    //console.log("checking",product.name);
   let cartList = await Cart.findOne({ _userId: user_id });
   //console.log("checking error",cartList);
   if (cartList) {

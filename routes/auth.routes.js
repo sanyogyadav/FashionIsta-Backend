@@ -14,7 +14,4 @@ router.post('/signup', AuthController.signup)
 // if we want adding validator
 // router.post('/signup', [isEmail, ...] AuthController.login)
 
-// router.patch('/:id', UserController.updateUser)
-// router.delete('/:id', UserController.deleteUser)
-
 module.exports = router;

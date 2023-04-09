@@ -7,7 +7,7 @@ exports.login = async (req, res, next) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email });
     if (!user) {
       return res.send({status:401, message:"There is no account for this Email, try create new account"});
     }
@@ -50,6 +50,8 @@ exports.me = async (req, res, next) => {
     const user = await User.findById(req.user);
     // redisClient.hset('users', req.user.id, )
     // const token = jwt.encode({id:user.id}, process.env.JWT_SECRET)
+    // const data = jwt.decode(token, process.env.JWT_SECRET)
+    // return data
     return res.send({status:401, user});
   } catch (err) {
     next(err);

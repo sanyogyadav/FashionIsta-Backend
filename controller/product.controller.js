@@ -27,14 +27,14 @@ exports.productById = async (req, res) => {
  */
 exports.newProduct = async (req, res) => {
   // get data from request
-  let product_title = req.body.title;
-  let product_sub_title = req.body.sub_title;
+  let type = req.body.product_type;
+  let brandName = req.body.brand_name;
   let product_description = req.body.description;
   // let product_image = req.file.filename
   // set data to schema
   let newProduct = new Product({
-    title: product_title,
-    sub_title: product_sub_title,
+    product_type: type,
+    brand_name: brandName,
     description: product_description,
     // image: product_image
   });
