@@ -8,11 +8,11 @@ const Product = require("../model/product.model");
  */
 exports.wishList = async (req, res) => {
   try {
-    const fav = await Favourite.findOne({ _userId: req.params.id }, )
-    res.send({products: fav.products});
-  }catch(err){
-    res.send({message : "WishList Not Found"});
-  }   
+    const fav = await Favourite.findOne({ _userId: req.params.id }).populate('products')
+    res.send(fav.products);
+  } catch (err) {
+    res.send({ message: "WishList Not Found" });
+  }
 };
 
 /**
@@ -22,22 +22,26 @@ exports.wishList = async (req, res) => {
 exports.addProductToList = async (req, res) => {
   // get data from request
   let user_id = req.params.id;
-  var product_id = Product({ _id: req.body.product_id });
+  let product = await Product.findOne({ _id: req.body.product_id });
   // Find if there is wish list for the user
-  let wishList = await Favourite.findOne({ _userId: user_id });
-  if (wishList) {
-    wishList.products.push(product_id);
-    wishList.save();
+  try {
+    let wishList = await Favourite.findOne({ _userId: user_id });
+    if (wishList) {
+      wishList.products.push(product._id);
+      wishList.save();
 
-    return res.send(wishList);
-  } else {
-    // set data to schema
-    let newWishList = new Favourite({
-      _userId: user_id,
-      products: [product_id],
-    });
-    // save data to db
-    newWishList.save();
+      return res.send(wishList);
+    } else {
+      // set data to schema
+      let newWishList = new Favourite({
+        _userId: user_id,
+        products: [product._id],
+      });
+      // save data to db
+      newWishList.save();
+    }
+  } catch (err) {
+    console.log("Cannot add wishlist");
   }
 };
 
@@ -56,7 +60,7 @@ exports.emptyProductsList = (req, res) => {
 /**
  * DELETE /wish-list/pd/:id
  * Purpose: Delete a product
- */ 
+ */
 exports.deleteProduct = async (req, res) => {
   // We want to delete the specified product (document with id in the URL)
   // get data from request
@@ -66,6 +70,6 @@ exports.deleteProduct = async (req, res) => {
   let wishList = await Favourite.findOne({ _userId: user_id });
   wishList.products.pull(product_id);
   wishList.save();
-  
+
   return res.send(wishList);
 };

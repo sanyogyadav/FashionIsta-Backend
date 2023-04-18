@@ -16,7 +16,7 @@ exports.productsList = async (req, res) => {
 exports.productById = async (req, res) => {
   try{
   const product = await Product.findById({ _id: req.params.id })
-  res.send(product);
+  res.json(product);
   }catch(err){
     res.send({message:"Product does not exist with given ID"})
   }
@@ -30,12 +30,17 @@ exports.newProduct = async (req, res) => {
   let type = req.body.product_type;
   let brandName = req.body.brand_name;
   let product_description = req.body.description;
+  let image = req.body.image;
+  let price = req.body.price;
   // let product_image = req.file.filename
   // set data to schema
   let newProduct = new Product({
     product_type: type,
     brand_name: brandName,
     description: product_description,
+    image : image,
+    price : price
+
     // image: product_image
   });
   // save data to db
@@ -47,16 +52,11 @@ exports.newProduct = async (req, res) => {
  * PATCH /product/:id
  * Purpose: Update a specified product
  */
-exports.updateProduct = (req, res) => {
+exports.updateProduct = async (req, res) => {
   // We want to update the specified product (product document with id in the URL) with the new values specified in the JSON body of the request
-  Product.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: req.body,
-    }
-  ).then(() => {
-    res.send({ message: "Product updated successfully" });
-  });
+  const productObj = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  console.log(productObj);
+    res.json(productObj);
 };
 /**
  * DELETE /product/:id

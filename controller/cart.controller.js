@@ -8,8 +8,14 @@ const Product = require("../model/product.model");
  */
 exports.CartList = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ _userId: req.params.id }, )
-    res.send({products: cart.products});
+    // var productArray = [];
+    const cart = await Cart.findOne({ _userId: req.params.id }).populate('products')
+    // console.log(cart);
+    // for (let x of cart.products) {
+    //   const product = await Product.findById(x);
+    //   productArray.push(product);
+    // }
+    res.send(cart.products);
   }catch(err){
     res.send({message : "Cart doesn't found"});
   }    
@@ -42,7 +48,6 @@ exports.addProductToCart= async (req, res) => {
       _userId: user_id,
       // products: [{_id: product._id}],
       products: [product._id],
-
     });
     // save data to db
     newCartList.save()
@@ -56,15 +61,20 @@ exports.addProductToCart= async (req, res) => {
  * DELETE /cart/:id
  * Purpose: Delete a cart
  */
+
 exports.emptyProductsList = (req, res) => {
-  // We want to delete the all products from cart  (document with id in the URL)
-  Cart.findOneAndRemove({ _userId: req.params.id }).then(
-    (removedProductDoc) => {
-      res.send(removedProductDoc);
-      // console.log({message : "Cart deleted...."})
+  try{
+        // We want to delete the all products from cart  (document with id in the URL)
+        // Cart.findOneAndRemove({ _userId: req.params.id })
+        Cart.deleteOne({_userId: req.params.id});
+        // res.send("hello")
+        console.log({message : "deleted the cart"})
+         return res.status(200).send({messgae:"Your Cart is Empty"});
+  }catch(error){
+    res.send({message:"Your cart already empty"});
+  }
+  
     }
-  );
-};
 /**
  * DELETE /cart/pd/:id
  * Purpose: Delete a product
@@ -78,5 +88,5 @@ exports.deleteProduct = async (req, res) => {
   let cartList = await Cart.findOne({ _userId: user_id });
   cartList.products.pull(product._id);
   cartList.save();
-  return res.status(200).send(cartList);
+  return res.status(201).send({message: "Selected product removed from cart"});
 };

@@ -24,7 +24,7 @@ app.use(passportJWT.initialize())
 
 app.use('/product',  ProductRoutes);
 // /*** WISH LIST ROUTES ***/
-app.use('/wish_list', FavRoutes);
+app.use('/wish-list', FavRoutes);
 // /*** CART ROUTES ***/
 app.use('/cart', CartRoutes);
 // /*** Auth ROUTES ***/
