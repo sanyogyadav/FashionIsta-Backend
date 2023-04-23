@@ -16,7 +16,7 @@ exports.login = async (req, res, next) => {
       return res.send({status:401, message:"Wrong Password"});
     }
     const token = jwt.encode({ id: user.id }, process.env.JWT_SECRET);
-    return res.send({status:200, user, token });
+    return res.send({status:200, user, token, message:"Login Successfully" });
   } catch (err) {
     next(err);
   }
@@ -39,20 +39,6 @@ exports.signup = async (req, res, next) => {
     user = await user.save();
     const token = jwt.encode({ id: user.id }, process.env.JWT_SECRET);
     return res.send({status:201, user, token });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.me = async (req, res, next) => {
-  try {
-    // validatorHander(req)
-    const user = await User.findById(req.user);
-    // redisClient.hset('users', req.user.id, )
-    // const token = jwt.encode({id:user.id}, process.env.JWT_SECRET)
-    // const data = jwt.decode(token, process.env.JWT_SECRET)
-    // return data
-    return res.send({status:401, user});
   } catch (err) {
     next(err);
   }

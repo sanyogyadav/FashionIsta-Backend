@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Favourite = require("../model/fav.model");
 const Product = require("../model/product.model");
 
@@ -30,7 +29,9 @@ exports.addProductToList = async (req, res) => {
       wishList.products.push(product._id);
       wishList.save();
 
-      return res.send(wishList);
+      // return res.send(wishList);
+      return res.status(201).send({ message: "Product is successfully added to Wishlist" });
+
     } else {
       // set data to schema
       let newWishList = new Favourite({
@@ -39,6 +40,8 @@ exports.addProductToList = async (req, res) => {
       });
       // save data to db
       newWishList.save();
+      return res.status(201).send({ message: "Product is successfully added to Wishlist" });
+
     }
   } catch (err) {
     console.log("Cannot add wishlist");
@@ -70,6 +73,6 @@ exports.deleteProduct = async (req, res) => {
   let wishList = await Favourite.findOne({ _userId: user_id });
   wishList.products.pull(product_id);
   wishList.save();
-
-  return res.send(wishList);
+  // return res.send(wishList);
+  return res.status(201).send({ message: "Selected product removed from wishlist" });
 };

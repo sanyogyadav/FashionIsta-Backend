@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Cart = require("../model/cart.model");
 const Product = require("../model/product.model");
 
@@ -8,51 +7,43 @@ const Product = require("../model/product.model");
  */
 exports.CartList = async (req, res) => {
   try {
-    // var productArray = [];
     const cart = await Cart.findOne({ _userId: req.params.id }).populate('products')
-    // console.log(cart);
-    // for (let x of cart.products) {
-    //   const product = await Product.findById(x);
-    //   productArray.push(product);
-    // }
     res.send(cart.products);
-  }catch(err){
-    res.send({message : "Cart doesn't found"});
-  }    
+  } catch (err) {
+    res.send({ message: "Cart doesn't found" });
+  }
 };
 
 /**
  * POST /cart
  * Purpose: add new product
  */
-exports.addProductToCart= async (req, res) => {
-  
-    // get data from request
+exports.addProductToCart = async (req, res) => {
+
+  // get data from request
   let user_id = req.params.id;
   let product = await Product.findOne({ _id: req.body.product_id });
-  //console.log("hello",user_id);
-  
-  try{
-    // Find if there is cart for the user
-    //console.log("checking",product.name);
-  let cartList = await Cart.findOne({ _userId: user_id });
-  //console.log("checking error",cartList);
-  if (cartList) {
-    cartList.products.push(product._id);
-    cartList.save();
 
-    return res.status(201).send(cartList);
-  } else {
-    // set data to schema
-    let newCartList = new Cart({
-      _userId: user_id,
-      // products: [{_id: product._id}],
-      products: [product._id],
-    });
-    // save data to db
-    newCartList.save()
-  }
-  }catch(err){
+  try {
+    // Find if there is cart for the user
+    let cartList = await Cart.findOne({ _userId: user_id });
+    if (cartList) {
+      cartList.products.push(product._id);
+      cartList.save();
+
+      return res.status(201).send({ message: "Product is successfully added to cart" });
+    } else {
+      // set data to schema
+      let newCartList = new Cart({
+        _userId: user_id,
+        // products: [{_id: product._id}],
+        products: [product._id],
+      });
+      // save data to db
+      newCartList.save()
+      return res.status(201).send({ message: "Product is successfully added to cart" });
+    }
+  } catch (err) {
     console.log("Cannot add product");
   }
 };
@@ -63,18 +54,16 @@ exports.addProductToCart= async (req, res) => {
  */
 
 exports.emptyProductsList = (req, res) => {
-  try{
-        // We want to delete the all products from cart  (document with id in the URL)
-        // Cart.findOneAndRemove({ _userId: req.params.id })
-        Cart.deleteOne({_userId: req.params.id});
-        // res.send("hello")
-        console.log({message : "deleted the cart"})
-         return res.status(200).send({messgae:"Your Cart is Empty"});
-  }catch(error){
-    res.send({message:"Your cart already empty"});
+  try {
+    // We want to delete the all products from cart  (document with id in the URL)
+    // Cart.findOneAndRemove({ _userId: req.params.id })
+    Cart.deleteOne({ _userId: req.params.id });
+    console.log({ message: "deleted the cart" })
+    return res.status(200).send({ messgae: "Your Cart is Empty" });
+  } catch (error) {
+    res.send({ message: "Your cart already empty" });
   }
-  
-    }
+}
 /**
  * DELETE /cart/pd/:id
  * Purpose: Delete a product
@@ -88,5 +77,5 @@ exports.deleteProduct = async (req, res) => {
   let cartList = await Cart.findOne({ _userId: user_id });
   cartList.products.pull(product._id);
   cartList.save();
-  return res.status(201).send({message: "Selected product removed from cart"});
+  return res.status(201).send({ message: "Selected product removed from cart" });
 };

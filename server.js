@@ -17,11 +17,6 @@ const CartRoutes = require('./routes/cart.routes')
 const AuthRoutes = require('./routes/auth.routes')
 const UserRoutes = require('./routes/user.routes')
 
-// import middleware
-const passportJWT = require('./middleware/passport.JWT')()
-// middleware
-app.use(passportJWT.initialize())
-
 app.use('/product',  ProductRoutes);
 // /*** WISH LIST ROUTES ***/
 app.use('/wish-list', FavRoutes);

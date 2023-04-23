@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const Product = require('../model/product.model')
 
 /**
@@ -14,11 +13,11 @@ exports.productsList = async (req, res) => {
  * Purpose: get product by id
  */
 exports.productById = async (req, res) => {
-  try{
-  const product = await Product.findById({ _id: req.params.id })
-  res.json(product);
-  }catch(err){
-    res.send({message:"Product does not exist with given ID"})
+  try {
+    const product = await Product.findById({ _id: req.params.id })
+    res.json(product);
+  } catch (err) {
+    res.send({ message: "Product does not exist with given ID" })
   }
 };
 /**
@@ -32,16 +31,13 @@ exports.newProduct = async (req, res) => {
   let product_description = req.body.description;
   let image = req.body.image;
   let price = req.body.price;
-  // let product_image = req.file.filename
   // set data to schema
   let newProduct = new Product({
     product_type: type,
     brand_name: brandName,
     description: product_description,
-    image : image,
-    price : price
-
-    // image: product_image
+    image: image,
+    price: price
   });
   // save data to db
   await newProduct.save()
@@ -56,7 +52,7 @@ exports.updateProduct = async (req, res) => {
   // We want to update the specified product (product document with id in the URL) with the new values specified in the JSON body of the request
   const productObj = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
   console.log(productObj);
-    res.json(productObj);
+  res.json(productObj);
 };
 /**
  * DELETE /product/:id
