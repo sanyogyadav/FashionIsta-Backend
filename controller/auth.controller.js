@@ -28,7 +28,6 @@ exports.signup = async (req, res, next) => {
       "+password"
     );
     if (existingUser) {
-
       return res.send({status:401, message:"Email already in use try different email ID"});
     }
     let user = new User();
@@ -38,7 +37,7 @@ exports.signup = async (req, res, next) => {
 
     user = await user.save();
     const token = jwt.encode({ id: user.id }, process.env.JWT_SECRET);
-    return res.send({status:201, user, token });
+    return res.send({status:201, user, token, message:"Register successfully"});
   } catch (err) {
     next(err);
   }
