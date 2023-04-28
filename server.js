@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-mongoose.connect('mongodb://localhost:27017/SummerFashion', { useNewUrlParser: true })
+mongoose.connect('mongodb://database:27017/SummerFashion', { useNewUrlParser: true })
 const db = mongoose.connection;
 
 db.on('error', (error) => (console.error(error)))
